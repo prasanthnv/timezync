@@ -12,7 +12,6 @@ services:
       - ./database:/app/database
     environment:
       - FLASK_ENV=development
-      - DATABASE_URI=sqlite:///database/app.db
       - SECRET_KEY=secret
       - FLASK_APP=timezync
     command: flask run --host=0.0.0.0 --port=5000 --reload
