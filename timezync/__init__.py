@@ -3,7 +3,7 @@ from config import Config
 from flask_marshmallow import Marshmallow
 from timezync.database import db
 from flask_migrate import Migrate
-from timezync.rest.api import rest_bp
+from timezync.routes import router
 
 
 app = Flask(__name__)
@@ -13,7 +13,9 @@ db.init_app(app)
 ma = Marshmallow(app)
 migrate = Migrate(app, db)
 # Register blueprints here
-app.register_blueprint(rest_bp)
+# app.register_blueprint(user_bp)
+router.register(app)
+
 
 
 with app.app_context():

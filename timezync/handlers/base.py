@@ -1,17 +1,23 @@
-from timezync.database import db
-from timezync.models.user import User, user_schema, users_schema
-from sqlalchemy.exc import IntegrityError
+from timezync import db
 
 class BaseHandler:
-    def __init__(self, model, schema):
-        self.model = model
-        self.schema = schema
-    
+    model = None
+   
     def create(self, data):
-        try:
-            new_object = self.model(**data)
-            db.session.add(new_object)
-            db.session.commit()
-        except IntegrityError as e:
-            db.session.rollback()
-            return {'message': 'Data already exists'}, 409
+        instance = self.model(**data)
+        db.session.add(instance)
+        db.session.commit()
+        return instance
+
+    def get(self, id):
+        return self.model.query.get(id)
+
+    def update(self, instance, data):
+        for key, value in data.items():
+            setattr(instance, key, value)
+        db.session.commit()
+        return instance
+
+    def delete(self, instance):
+        db.session.delete(instance)
+        db.session.commit()
